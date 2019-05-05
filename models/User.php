@@ -20,6 +20,7 @@ use yii\web\IdentityInterface;
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     public $password;
+    public $confirmPassword;
 
     public function behaviors()
     {
@@ -41,8 +42,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email', 'password'], 'required'],
+            [['username', 'email', 'password', 'confirmPassword'], 'required'],
             ['email', 'email'],
+
+            //TODO password validator
+            
+            ['confirmPassword', 'compare', 'compareAttribute' => 'password'],
             [['created_at', 'updated_at'], 'integer'],
             [['username', 'email', 'password_hash', 'auth_key'], 'string', 'max' => 255],
         ];
@@ -57,7 +62,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'id' => 'ID',
             'username' => 'Имя',
             'email' => 'Email',
-            'password_hash' => 'Пароль',
+            'password' => 'Пароль',
+            'confirmPassword' => 'Подтвердите пароль',
             'auth_key' => 'Auth Key',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
