@@ -16,11 +16,13 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  * @property int $created_at
  * @property int $updated_at
+ * @property bool $agreement
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     public $password;
     public $confirmPassword;
+    public $agreement;
 
     public function behaviors()
     {
@@ -44,6 +46,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['username', 'email', 'password', 'confirmPassword'], 'required'],
             ['email', 'email'],
+            [
+                ['agreement'],
+                'compare',
+                'compareValue' => 1,
+                'message' => 'Вы должны согласится с условиями пользовательского соглашения'
+            ],
 
             //TODO password validator
             
@@ -64,6 +72,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'password' => 'Пароль',
             'confirmPassword' => 'Подтвердите пароль',
+            'agreement' => 'Соглашаюсь с условиями пользовательского соглашения',
             'auth_key' => 'Auth Key',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
